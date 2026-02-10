@@ -1,0 +1,160 @@
+//question 1
+
+// #include <iostream>
+// using namespace std;
+
+// int binarySearch(int arr[], int n, int target) {
+//     int low = 0;
+//     int high = n - 1;
+
+//     while (low <= high) {
+//         int mid = low + (high - low) / 2;
+
+//         if (arr[mid] == target)
+//             return mid;
+//         else if (arr[mid] < target)
+//             low = mid + 1;
+//         else
+//             high = mid - 1;
+//     }
+
+//     return -1;
+// }
+
+// int main() {
+//     int arr[] = {2, 5, 8, 12, 16, 23, 38, 56, 72, 91};
+//     int n = sizeof(arr) / sizeof(arr[0]);
+//     int target = 23;
+
+//     int result = binarySearch(arr, n, target);
+
+//     if (result != -1)
+//         cout << result;
+//     else
+//         cout << -1;
+
+//     return 0;
+// }
+
+
+//question 2
+
+// #include <iostream>
+// using namespace std;
+
+// void merge(int arr[], int l, int m, int r) {
+//     int n1 = m - l + 1;
+//     int n2 = r - m;
+
+//     int L[n1], R[n2];
+
+//     for (int i = 0; i < n1; i++) L[i] = arr[l + i];
+//     for (int j = 0; j < n2; j++) R[j] = arr[m + 1 + j];
+
+//     int i = 0, j = 0, k = l;
+
+//     while (i < n1 && j < n2) {
+//         if (L[i] <= R[j]) arr[k++] = L[i++];
+//         else arr[k++] = R[j++];
+//     }
+
+//     while (i < n1) arr[k++] = L[i++];
+//     while (j < n2) arr[k++] = R[j++];
+// }
+
+// void mergeSort(int arr[], int l, int r) {
+//     if (l < r) {
+//         int m = l + (r - l) / 2;
+//         mergeSort(arr, l, m);
+//         mergeSort(arr, m + 1, r);
+//         merge(arr, l, m, r);
+//     }
+// }
+
+// void printArray(int arr[], int n) {
+//     for (int i = 0; i < n; i++)
+//         cout << arr[i] << " ";
+//     cout << endl;
+// }
+
+// int main() {
+//     int arr[] = {12, 11, 13, 5, 6, 7};
+//     int n1 = sizeof(arr) / sizeof(arr[0]);
+
+//     int arr2[] = {38, 27, 43, 3, 9, 82, 10};
+//     int n2 = sizeof(arr2) / sizeof(arr2[0]);
+
+//     mergeSort(arr, 0, n1 - 1);
+//     mergeSort(arr2, 0, n2 - 1);
+
+//     printArray(arr, n1);
+//     printArray(arr2, n2);
+
+//     return 0;
+// }
+
+//question 3
+
+// #include <iostream>
+// using namespace std;
+
+// int partition(int arr[], int low, int high) {
+//     int pivot = arr[high];
+//     int i = low - 1;
+
+//     for (int j = low; j < high; j++) {
+//         if (arr[j] <= pivot) {
+//             i++;
+//             swap(arr[i], arr[j]);
+//         }
+//     }
+
+//     swap(arr[i + 1], arr[high]);
+//     return i + 1;
+// }
+
+// void quickSort(int arr[], int low, int high) {
+//     if (low < high) {
+//         int pi = partition(arr, low, high);
+//         quickSort(arr, low, pi - 1);
+//         quickSort(arr, pi + 1, high);
+//     }
+// }
+
+// int main() {
+//     int arr[] = {4, 2, 6, 9, 2};
+//     int n = sizeof(arr) / sizeof(arr[0]);
+
+//     quickSort(arr, 0, n - 1);
+
+//     for (int i = 0; i < n; i++)
+//         cout << arr[i] << " ";
+
+//     return 0;
+// }
+
+//question 4
+
+#include <iostream>
+using namespace std;
+
+int maxSubarraySum(int arr[], int n) {
+    int maxSoFar = arr[0];
+    int currMax = arr[0];
+
+    for (int i = 1; i < n; i++) {
+        currMax = max(arr[i], currMax + arr[i]);
+        maxSoFar = max(maxSoFar, currMax);
+    }
+
+    return maxSoFar;
+}
+
+int main() {
+    int arr[] = {-2, -5, 6, -2, -3, 1, 5, -6};
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    cout << maxSubarraySum(arr, n);
+
+    return 0;
+}

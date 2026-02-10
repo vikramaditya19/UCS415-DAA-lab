@@ -1,0 +1,259 @@
+//question 1 additional
+
+// #include <bits/stdc++.h>
+// using namespace std;
+
+// bool canDivide(vector<int>& A, int M, int X) {
+//     int segments = 1;
+//     int currOR = 0;
+
+//     for (int x : A) {
+//         if ((currOR | x) <= X) {
+//             currOR |= x;
+//         } else {
+//             segments++;
+//             currOR = x;
+//         }
+//     }
+
+//     return segments <= M;
+// }
+
+// int minimumMaxOR(vector<int>& A, int M) {
+//     int low = 0, high = 0;
+
+//     for (int x : A) {
+//         low = max(low, x);
+//         high |= x;
+//     }
+
+//     int ans = high;
+
+//     while (low <= high) {
+//         int mid = low + (high - low) / 2;
+
+//         if (canDivide(A, M, mid)) {
+//             ans = mid;
+//             high = mid - 1;
+//         } else {
+//             low = mid + 1;
+//         }
+//     }
+
+//     return ans;
+// }
+
+// int main() {
+//     vector<int> A = {1, 2, 3, 4};
+//     int M = 2;
+
+//     cout << minimumMaxOR(A, M);
+//     return 0;
+// }
+
+//question 2 additional
+
+// #include <bits/stdc++.h>
+// using namespace std;
+
+// int maxGoodSubsequence(vector<int>& A) {
+//     sort(A.begin(), A.end());
+
+//     int left = 0, ans = 0;
+
+//     for (int right = 0; right < A.size(); right++) {
+//         while (A[right] - A[left] > 10) {
+//             left++;
+//         }
+//         ans = max(ans, right - left + 1);
+//     }
+
+//     return ans;
+// }
+
+// int main() {
+//     vector<int> A = {1, 5, 6, 14, 15, 16, 17};
+//     cout << maxGoodSubsequence(A);
+//     return 0;
+// }
+
+//question 3 additional
+
+// #include <iostream>
+// using namespace std;
+
+// int main() {
+//     int A[] = {1, 2, 3, 4};   // <-- CHANGE THIS ARRAY IF NEEDED
+//     int N = sizeof(A) / sizeof(A[0]);
+
+//     if (N < 2) {
+//         cout << 0;
+//         return 0;
+//     }
+
+//     int max1 = A[0], max2 = A[1];
+//     if (max2 > max1) swap(max1, max2);
+
+//     for (int i = 2; i < N; i++) {
+//         if (A[i] > max1) {
+//             max2 = max1;
+//             max1 = A[i];
+//         } else if (A[i] > max2) {
+//             max2 = A[i];
+//         }
+//     }
+
+//     cout << max1 + max2;
+//     return 0;
+// }
+
+//question 4 additional
+
+// #include <iostream>
+// using namespace std;
+
+// int main() {
+//     int A[] = {1, 3, 2, 4, 5};   // ← hard-coded array
+//     int n = 5;
+//     int k = 2;
+
+//     long long specialty = 0;
+
+//     for (int l = 0; l < n; l++) {
+//         int B[5] = {0};
+
+//         for (int i = 0; i < n; i++) {
+//             if (A[i] > A[l]) B[i] = 1;
+//         }
+
+//         int rightCount[10] = {0};
+//         int sum = 0;
+//         rightCount[0] = 1;
+
+//         for (int i = l + 1; i < n; i++) {
+//             sum += B[i];
+//             rightCount[sum]++;
+//         }
+
+//         sum = 0;
+//         bool ok = false;
+
+//         for (int i = l; i >= 0; i--) {
+//             sum += B[i];
+//             if (k - sum >= 0 && k - sum < 10 && rightCount[k - sum] > 0) {
+//                 ok = true;
+//                 break;
+//             }
+//         }
+
+//         if (ok) specialty += A[l];
+//     }
+
+//     cout << specialty;
+//     return 0;
+// }
+
+//question 5 additional
+
+// #include <iostream>
+// using namespace std;
+
+// int main() {
+//     long long N = 6;   // number of rectangles
+//     long long H = 2;   // height
+//     long long W = 3;   // width
+
+//     long long low = (H > W ? H : W);
+//     long long high = low * N;
+//     long long ans = high;
+
+//     while (low <= high) {
+//         long long mid = low + (high - low) / 2;
+
+//         long long rows = mid / W;
+//         long long cols = mid / H;
+
+//         if (rows > 0 && cols > 0 && rows >= (N + cols - 1) / cols) {
+//             ans = mid;
+//             high = mid - 1;
+//         } else {
+//             low = mid + 1;
+//         }
+//     }
+
+//     cout << ans;
+//     return 0;
+// }
+
+//question 6 additional
+
+#include <bits/stdc++.h>
+using namespace std;
+
+struct Point {
+    double x, y;
+};
+
+double dist(Point a, Point b) {
+    return hypot(a.x - b.x, a.y - b.y);
+}
+
+double brute(vector<Point>& p, int l, int r) {
+    double d = 1e18;
+    for (int i = l; i <= r; i++)
+        for (int j = i + 1; j <= r; j++)
+            d = min(d, dist(p[i], p[j]));
+    return d;
+}
+
+double stripClosest(vector<Point>& strip, double d) {
+    sort(strip.begin(), strip.end(), [](auto &a, auto &b) {
+        return a.y < b.y;
+    });
+
+    double mn = d;
+    for (int i = 0; i < strip.size(); i++) {
+        for (int j = i + 1; j < strip.size() && (strip[j].y - strip[i].y) < mn; j++) {
+            mn = min(mn, dist(strip[i], strip[j]));
+        }
+    }
+    return mn;
+}
+
+double closestUtil(vector<Point>& p, int l, int r) {
+    if (r - l <= 3)
+        return brute(p, l, r);
+
+    int mid = (l + r) / 2;
+    double midx = p[mid].x;
+
+    double dl = closestUtil(p, l, mid);
+    double dr = closestUtil(p, mid + 1, r);
+
+    double d = min(dl, dr);
+
+    vector<Point> strip;
+    for (int i = l; i <= r; i++)
+        if (abs(p[i].x - midx) < d)
+            strip.push_back(p[i]);
+
+    return min(d, stripClosest(strip, d));
+}
+
+int main() {
+    vector<Point> p = {
+        {9,3}, {2,6}, {15,3}, {5,1},
+        {1,2}, {12,4}, {7,2}, {4,7},
+        {16,5}, {3,3}, {10,5}, {6,4},
+        {14,6}, {8,6}, {11,1}, {13,2}
+    };
+
+    sort(p.begin(), p.end(), [](auto &a, auto &b) {
+        return a.x < b.x;
+    });
+
+    cout << fixed << setprecision(3)
+         << closestUtil(p, 0, p.size() - 1);
+
+    return 0;
+}
